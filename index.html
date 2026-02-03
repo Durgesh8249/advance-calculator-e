@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Calculator</title>
+
+<style>
+:root {
+    --bg: linear-gradient(135deg, #667eea, #764ba2);
+    --calc-bg: rgba(255,255,255,0.2);
+    --display-bg: rgba(255,255,255,0.9);
+    --text: #000;
+    --btn: #ffffff;
+    --operator: #ff9f43;
+    --equal: #10ac84;
+}
+
+body.dark {
+    --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --calc-bg: #1e1e2f;
+    --display-bg: #000;
+    --text: #00ffcc;
+    --btn: #2a2a40;
+    --operator: #ff8c00;
+    --equal: #00ffcc;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg);
+    transition: 0.3s;
+}
+
+.calculator {
+    width: 360px;
+    padding: 25px;
+    border-radius: 25px;
+    background: var(--calc-bg);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.toggle {
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.display {
+    width: 100%;
+    height: 75px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    padding: 15px;
+    font-size: 2.2rem;
+    text-align: right;
+    background: var(--display-bg);
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+button {
+    height: 60px;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    background: var(--btn);
+    color: var(--text);
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.operator {
+    background: var(--operator);
+    color: white;
+}
+
+.equal {
+    background: var(--equal);
+    color: black;
+    grid-column: span 2;
+}
+
+.clear {
+    background: #ee5253;
+    color: white;
+}
+
+.percent {
+    background: #5f27cd;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <div class="top">
+        <strong>Calculator</strong>
+        <div class="toggle" onclick="toggleMode()">🌙</div>
+    </div>
+
+    <input type="text" id="display" class="display" disabled>
+
+    <div class="buttons">
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button class="percent" onclick="percentage()">%</button>
+        <button class="operator" onclick="append('/')">÷</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button class="operator" onclick="append('*')">×</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button class="operator" onclick="append('-')">−</button>
+
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+        <button onclick="append('3')">3</button>
+        <button class="operator" onclick="append('+')">+</button>
+
+        <button onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+const display = document.getElementById("display");
+
+function append(value) {
+    display.value += value;
+}
+
+function clearDisplay() {
+    display.value = "";
+}
+
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+
+function calculate() {
+    try {
+        display.value = eval(display.value);
+    } catch {
+        display.value = "Error";
+    }
+}
+
+function percentage() {
+    try {
+        display.value = eval(display.value) / 100;
+    } catch {
+        display.value = "Error";
+    }
+}
+
+function toggleMode() {
+    document.body.classList.toggle("dark");
+}
+
+/* Keyboard Support */
+document.addEventListener("keydown", (e) => {
+    if (!isNaN(e.key) || "+-*/.".includes(e.key)) {
+        append(e.key);
+    }
+    if (e.key === "Enter") calculate();
+    if (e.key === "Backspace") deleteLast();
+    if (e.key === "Escape") clearDisplay();
+});
+</script>
+
+</body>
+</html>
